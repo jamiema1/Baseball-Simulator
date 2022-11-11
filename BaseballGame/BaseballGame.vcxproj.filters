@@ -27,7 +27,7 @@
     <ClCompile Include="src\main\pitcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\main\state.cpp">
+    <ClCompile Include="src\main\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\main\timeDelay.cpp">
@@ -39,6 +39,9 @@
     <ClCompile Include="src\main\player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\main\team.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main\dice.h">
@@ -47,7 +50,7 @@
     <ClInclude Include="src\main\intro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\main\state.h">
+    <ClInclude Include="src\main\game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\main\timeDelay.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\main\player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\team.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

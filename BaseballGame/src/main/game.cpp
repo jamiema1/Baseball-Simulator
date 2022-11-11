@@ -1,5 +1,5 @@
 #include "dice.h"
-#include "state.h"
+#include "game.h"
 #include "timeDelay.h"
 
 #include <iostream>
@@ -278,18 +278,13 @@ Organization MLB{
 };
 */
 
-Team* awayTeam;
-Team* homeTeam;
 
-int outs{};
-int score{};
-int inning{};
-int half{};
 
 Batter b = { "Maikel","Franco","3B","R","R",104,377,31,79,22,0,11,47,0,20,0.355,0.609,0.21,-1.6 };
 Batter c = { "Kelvin","Gutierrez","3B","R","R",85,272,23,63,8,3,3,20,0,19,0.316,0.608,0.232,-0.1 };
 Pitcher p = { "Keegan","Akin","P","R","L",24,2,10,95,110,70,70,40,82,0,1.579,6.63,-0.3 };
 
+/*
 Team Orioles{
 	"Balimore Orioles",
 	"BAL",
@@ -310,17 +305,7 @@ Team RedSox{
 	{ p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p },
 	p
 };
-
-Batter bases[4];
-/* 0 means at home
- * 1 means 1st base
- * 2 means 2nd base
- * 3 means 3rd base
- */
-int teamSize = 9;
-Batter field[9];
-Batter batter[9];
-Batter nullBatter = { "","","","","",0,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0 };
+*/
 
 /*
 void fiveGameSeries(int team1, int team2) {
@@ -389,7 +374,7 @@ void fiveGameSeries(int team1, int team2) {
 }
 */
 
-void game() {
+void Game::game() {
 	bool b3{ true };
 	std::srand(static_cast<unsigned int>(std::time(nullptr)));
 	while (b3) {
@@ -400,24 +385,21 @@ void game() {
 		while (b2) {
 			while (b1) {
 				if (displayText()) {
-					lineups();
+					homeTeam->lineups(homeTeam, awayTeam);
 					pause();
 					gameSpeed();
 				}
 
 				// engine of the game
-				Batter batter = currentBatter();
-				Pitcher pitcher = currentPitcher();
-				nextBatter();
-				nextPitcher();
+
 				int stat1;
 				int pitchValue = -1;
 				while (pitchValue == -1) {
 					stat1 = roll1();
-					pitchValue = pitchResult(batter, pitcher, stat1);
+					pitchValue = pitchResult(stat1);
 					if (displayText()) {
 						rollPrinter(stat1);
-						pitchPrinter(batter, pitcher, stat1);
+						pitchPrinter(stat1);
 						pause();
 						gameSpeed();
 						pitchResultPrinter(pitchValue);
@@ -438,12 +420,12 @@ void game() {
 					int hitValue = -1;
 					while (hitValue == -1) {
 						stat2 = roll1();
-						hitValue = hitResult(hitPosition, batter, stat2);
+						hitValue = hitResult(hitPosition, stat2);
 						if (displayText()) {
 							if (hitPosition < 10) {
 								rollPrinter(stat2);
-								batter.statSelectorPrinter(stat2);
-								hitPositionSelector(hitPosition).statSelectorPrinter(stat2);
+								getCurrentBatter()->statSelectorPrinter(stat2);
+								hitPositionSelector(hitPosition)->statSelectorPrinter(stat2);
 								std::cout << '\n';
 								pause();
 								gameSpeed();
@@ -454,6 +436,8 @@ void game() {
 						}
 					}
 				}
+				nextBatter();
+				nextPitcher();
 
 				if (displayText()) {
 					basesPrinter();
@@ -500,7 +484,7 @@ void game() {
 				b1 = true;
 			}
 			else if (x == '3') {
-				switchTeams();
+				swapTeams();
 				resetGame();
 				Sleep(1);
 				b1 = true;
@@ -510,14 +494,15 @@ void game() {
 	}
 }
 
-void switchTeams() {
-	Team* team1{ awayTeam };
-	awayTeam = { homeTeam };
-	homeTeam = { team1 };
+
+void Game::swapTeams() {
+	Team* team1 = awayTeam;
+	awayTeam = homeTeam;
+	homeTeam = team1;
 }
 
 
-void start() {
+void Game::start() {
 	// prints out the teams
 	/*
 	std::cout << "Teams:\n";
@@ -553,147 +538,48 @@ void start() {
 	}
 	system("CLS");
 	*/
-	awayTeam = &Orioles;
-	homeTeam = &RedSox;
+	//awayTeam = &Orioles;
+	//homeTeam = &RedSox;
 }
 
-
-// prints out the lineups for the home and away teams
-void lineups() {
-	std::cout << "Away: " << awayTeam->teamName;
-	for (int i = 0; i < (6 - ((static_cast<int>(awayTeam->teamName.length()) + 6) / 8)); i++) {
-		std::cout << '\t';
-	}
-	std::cout << "Home: " << homeTeam->teamName << "\n\n";
-
-	pitcherLineup();
-	batterLineup();
-}
-
-// !!! use abstraction later
-// prints out the batting lineup
-void batterLineup() {
-	for (int i = 0; i < 9; i++) {
-
-		// away team
-		std::cout << i + 1 << ". " << awayTeam->battingLineup[i].fullName();
-		for (int j = 0; j < (4 - (static_cast<int>(awayTeam->battingLineup[i].fullName().length()) + 3) / 8); j++) {
-			std::cout << '\t';
-		}
-		std::cout << awayTeam->battingLineup[i].stringStatSelector(2) << "\t\t";
-
-		// home team
-		std::cout << i + 1 << ". " << homeTeam->battingLineup[i].fullName();
-		for (int j = 0; j < (4 - (static_cast<int>(homeTeam->battingLineup[i].fullName().length()) + 3) / 8); j++) {
-			std::cout << '\t';
-		}
-		std::cout << homeTeam->battingLineup[i].stringStatSelector(2) << '\n';
-	}
-	std::cout << '\n';
-}
-
-// prints out the pitching lineup
-void pitcherLineup() {
-	for (int i = 0; i < 1; i++) {
-
-		// away team
-		std::cout << i + 1 << ". " << awayTeam->currentPitcher.fullName();
-		for (int j = 0; j < (4 - (static_cast<int>(awayTeam->currentPitcher.fullName().length()) + 3) / 8); j++) {
-			std::cout << '\t';
-		}
-		std::cout << awayTeam->currentPitcher.stringStatSelector(2) << "\t\t";
-
-		// home team
-		std::cout << i + 1 << ". " << homeTeam->currentPitcher.fullName();
-		for (int j = 0; j < (4 - (static_cast<int>(homeTeam->currentPitcher.fullName().length()) + 3) / 8); j++) {
-			std::cout << '\t';
-		}
-		std::cout << homeTeam->currentPitcher.stringStatSelector(2) << '\n';
-	}
-	std::cout << '\n';
-}
-
-// returns the current batter and sets them to being at bat
-Batter currentBatter() {
+Batter* Game::getCurrentBatter() {
 	if (half == 0) {
-		bases[0] = awayTeam->currentBatter;
-		return awayTeam->currentBatter;
+		bases[0] = awayTeam->getCurrentBatter();
+		return awayTeam->getCurrentBatter();
 	}
 	else {
-		bases[0] = homeTeam->currentBatter;
-		return homeTeam->currentBatter;
+		bases[0] = homeTeam->getCurrentBatter();
+		return homeTeam->getCurrentBatter();
 	}
 }
 
-Pitcher currentPitcher() {
+Pitcher* Game::getCurrentPitcher() {
 	if (half == 0) {
-		return homeTeam->currentPitcher;
+		return homeTeam->getCurrentPitcher();
 	}
 	else {
-		return awayTeam->currentPitcher;
+		return awayTeam->getCurrentPitcher();
 	}
 }
 
-// updates the current batter
-void nextBatter() {
+
+void Game::nextBatter() {
 	if (half == 0) {
-		for (int i = 0; i < 9; i++) {
-			if (awayTeam->currentBatter == awayTeam->battingLineup[i]) {
-				if (i == 8) {
-					awayTeam->currentBatter = awayTeam->battingLineup[0];
-				}
-				else {
-					awayTeam->currentBatter = awayTeam->battingLineup[i + 1];
-				}
-				break;
-			}
-		}
-		//nextBatter2(awayTeam);
+		awayTeam->nextBatter();
 	}
 	else {
-		for (int i = 0; i < 9; i++) {
-			if (homeTeam->currentBatter == homeTeam->battingLineup[i]) {
-				if (i == 8) {
-					homeTeam->currentBatter = homeTeam->battingLineup[0];
-				}
-				else {
-					homeTeam->currentBatter = homeTeam->battingLineup[i + 1];
-				}
-				break;
-			}
-		}
-		//nextBatter2(homeTeam);
+		homeTeam->nextBatter();
 	}
 }
 
-
-// ***does nothing for now***
-void nextPitcher() {
+void Game::nextPitcher() {
 }
-
-/*
-// abstract function for nextBatter()
-void nextBatter2(Team team) {
-	for (int i = 0; i < 9; i++) {
-		if (team.currentBatter == team.battingLineup[i]) {
-			if (i == 8) {
-				team.currentBatter = team.battingLineup[0];
-			}
-			else {
-				team.currentBatter = team.battingLineup[i + 1];
-			}
-			break;
-		}
-	}
-	std::cout << team.currentBatter.fullName() << '\n';
-}
-*/
-
 
 
 /* returns the result of the pitch
- * 1 -> contact
- * 0 -> out
+ * 1  -> contact
+ * 0  -> out
+ * -1 -> nothing
  */
 int batterPitcherStats[4][6]{
 	{ 0, 6, 3, 7, 13, 3}, // batter stat
@@ -701,55 +587,63 @@ int batterPitcherStats[4][6]{
 	{ 1, 1, 2, 2, 1, 1 }, // batter multiplier
 	{ 3, 2, 1, 1, 1, 1 } // pitcher multiplier
 };
-int pitchResult(Batter batter, Pitcher pitcher, int stat) {
+
+int Game::pitchResult(int stat) {
 	if (stat == 6) {
-		if (batter.stringStatSelector(batterPitcherStats[0][stat - 1]) == "S") {
-			return isContact(1);
+		std::string b = getCurrentBatter()->stringStatSelector(batterPitcherStats[0][stat - 1]);
+		std::string p = getCurrentPitcher()->stringStatSelector(batterPitcherStats[1][stat - 1]);
+
+		if (b == "S") {
+			return 1;
 		}
-		else if (batter.stringStatSelector(batterPitcherStats[0][stat - 1]) == "L" &&
-			pitcher.stringStatSelector(batterPitcherStats[1][stat - 1]) == "R") {
-			return isContact(1);
+		else if (b == "L" && p == "R") {
+			return 1;
 		}
-		else if (batter.stringStatSelector(batterPitcherStats[0][stat - 1]) == "R" &&
-			pitcher.stringStatSelector(batterPitcherStats[1][stat - 1]) == "L") {
-			return isContact(1);
+		else if (b == "R" && p == "L") {
+			return 1;
 		}
 		else {
-			return isContact(0);
+			isOut();
+			return 0;
 		}
 	}
 	else {
-		if (batterPitcherStats[2][stat - 1] * batter.statSelector(batterPitcherStats[0][stat - 1]) >
-			batterPitcherStats[3][stat - 1] * pitcher.statSelector(batterPitcherStats[1][stat - 1])) {
-			return isContact(1);
+		int bScalar = batterPitcherStats[2][stat - 1];
+		int bStat = getCurrentBatter()->statSelector(batterPitcherStats[0][stat - 1]);
+		int pScalar = batterPitcherStats[3][stat - 1];
+		int pStat = getCurrentPitcher()->statSelector(batterPitcherStats[1][stat - 1]);
+		
+		if (bScalar * bStat > pScalar * pStat) {
+			return 1;
 		}
-		else if (batterPitcherStats[2][stat - 1] * batter.statSelector(batterPitcherStats[0][stat - 1]) ==
-			batterPitcherStats[3][stat - 1] * pitcher.statSelector(batterPitcherStats[1][stat - 1])) {
+		else if (bScalar * bStat == pScalar * pStat) {
 			return -1;
 		}
 		else {
-			return isContact(0);
+			isOut();
+			return 0;
 		}
+		
 	}
 }
 
 // prints out the stats of the pitch
-void pitchPrinter(Batter batter, Pitcher pitcher, int stat) {
+void Game::pitchPrinter(int stat) {
 	if (stat == 6) {
-		std::cout << batter.fullName() << " bats: " <<
-			batter.stringStatSelector(batterPitcherStats[0][stat - 1]) << '\n';
-		std::cout << pitcher.fullName() << " throws: " <<
-			pitcher.stringStatSelector(batterPitcherStats[1][stat - 1]) << '\n';
+		std::cout << getCurrentBatter()->fullName() << " bats: " <<
+			getCurrentBatter()->stringStatSelector(batterPitcherStats[0][stat - 1]) << '\n';
+		std::cout << getCurrentPitcher()->fullName() << " throws: " <<
+			getCurrentPitcher()->stringStatSelector(batterPitcherStats[1][stat - 1]) << '\n';
 	}
 	else {
-		batter.statSelectorPrinter(batterPitcherStats[0][stat - 1]);
-		pitcher.statSelectorPrinter(batterPitcherStats[1][stat - 1]);
+		getCurrentBatter()->statSelectorPrinter(batterPitcherStats[0][stat - 1]);
+		getCurrentPitcher()->statSelectorPrinter(batterPitcherStats[1][stat - 1]);
 	}
 	std::cout << '\n';
 }
 
 // prints out the result of the pitch
-void pitchResultPrinter(int pitchValue) {
+void Game::pitchResultPrinter(int pitchValue) {
 	if (pitchValue == 1) {
 		std::cout << "The ball is put into play!" << '\n';
 	}
@@ -760,22 +654,14 @@ void pitchResultPrinter(int pitchValue) {
 }
 
 
-
-// returns 1 if contact was made, returns 1 and updates the outs if not
-int isContact(int value) {
-	if (value == 0) {
-		outs++;
-		bases[0] = nullBatter;
-		return 0;
-	}
-	else {
-		return 1;
-	}
+// updates the outs and sets bases[0] to NULL
+void Game::isOut() {
+	outs++;
+	bases[0] = NULL;
 }
 
 
-// returns the fielder at the given position
-Batter hitPositionSelector(int position) {
+Batter* Game::hitPositionSelector(int position) {
 	return field[position - 2];
 }
 
@@ -794,18 +680,17 @@ std::string hitPositionQuotes[11]{
 	"It's a triple!",
 	"It's a homerun!"
 };
-// prints out the name of the player the ball is hit to
-void hitPositionPrinter(int position) {
+
+void Game::hitPositionPrinter(int position) {
 	if (position < 10) {
-		std::cout << hitPositionQuotes[position - 2] << field[position - 2].fullName() << "\n\n";
+		std::cout << hitPositionQuotes[position - 2] << field[position - 2]->fullName() << "\n\n";
 	}
 	else {
 		std::cout << hitPositionQuotes[position - 2] << "\n\n";
 	}
 }
 
-// prints out the result of the contact
-void hitResultPrinter(int hitValue) {
+void Game::hitResultPrinter(int hitValue) {
 	switch (hitValue) {
 	case 0:
 		std::cout << "Out!" << '\n';
@@ -828,133 +713,110 @@ void hitResultPrinter(int hitValue) {
 	std::cout << '\n';
 }
 
-// determines the result of making contact and returns the hit value
-int hitResult(int hitPosition, Batter batter, int stat) {
+
+int Game::hitResult(int hitPosition, int stat) {
 	switch (hitPosition) {
 	case 10:
-		return isHit(batter, 2);
+		return isHit(2);
 		break;
 	case 11:
-		return isHit(batter, 3);
+		return isHit(3);
 		break;
 	case 12:
-		return isHit(batter, 4);
+		return isHit(4);
 		break;
 	default:
-		if (batter.statSelector(stat) > hitPositionSelector((hitPosition - 2)).statSelector(stat)) {
+		if (getCurrentBatter()->statSelector(stat) > hitPositionSelector(hitPosition)->statSelector(stat)) {
 			if (hitPosition == 7 || hitPosition == 8 || hitPosition == 9) {
-				return isHit(batter, 2);
+				return isHit(2);
 			}
 			else {
-				return isHit(batter, 1);
+				return isHit(1);
 			}
 		}
-		else if (batter.statSelector(stat) == hitPositionSelector((hitPosition - 2)).statSelector(stat)) {
+		else if (getCurrentBatter()->statSelector(stat) == hitPositionSelector(hitPosition)->statSelector(stat)) {
 			return -1;
 		}
 		else {
-			return isHit(batter, 0);
+			return isHit(0);
 		}
 		break;
 	}
 }
 
 
-/* updates the game state when a hit occurs
- * changes the runners, outs, inning, score
- */
-int isHit(Batter batter, int value) {
-	switch (value) {
-	case 0:
-		outs++;
-		bases[0] = nullBatter;
-		break;
-	case 1:
-		for (int i = 3; i >= 3; i--) {
-			if (bases[i] != nullBatter) {
+int Game::isHit(int value) {
+	if (value == 0) {
+		isOut();
+	}
+	else {
+		for (int i = 3; i > 3 - value; i--) {
+			if (bases[i] != NULL) {
 				isScored();
 			}
 		}
 		hitCounter();
 
-		bases[3] = bases[2];
-		bases[2] = bases[1];
-		bases[1] = batter;
-		bases[0] = nullBatter;
-		break;
-	case 2:
-		for (int i = 3; i >= 2; i--) {
-			if (bases[i] != nullBatter) {
-				isScored();
-			}
+		switch (value) {
+		case 1:
+			bases[3] = bases[2];
+			bases[2] = bases[1];
+			bases[1] = getCurrentBatter();
+			bases[0] = NULL;
+			break;
+		case 2:
+			bases[3] = bases[1];
+			bases[2] = getCurrentBatter();
+			bases[1] = NULL;
+			bases[0] = NULL;
+			break;
+		case 3:
+			bases[3] = getCurrentBatter();
+			bases[2] = NULL;
+			bases[1] = NULL;
+			bases[0] = NULL;
+			break;
+		case 4:
+			bases[3] = NULL;
+			bases[2] = NULL;
+			bases[1] = NULL;
+			bases[0] = NULL;
+		default:
+			break;
 		}
-		hitCounter();
-
-		bases[3] = bases[1];
-		bases[2] = batter;
-		bases[1] = nullBatter;
-		bases[0] = nullBatter;
-		break;
-	case 3:
-		for (int i = 3; i >= 1; i--) {
-			if (bases[i] != nullBatter) {
-				isScored();
-			}
-		}
-		hitCounter();
-
-		bases[3] = batter;
-		bases[2] = nullBatter;
-		bases[1] = nullBatter;
-		bases[0] = nullBatter;
-		break;
-	case 4:
-		for (int i = 3; i >= 0; i--) {
-			if (bases[i] != nullBatter) {
-				isScored();
-			}
-		}
-		hitCounter();
-
-		bases[3] = nullBatter;
-		bases[2] = nullBatter;
-		bases[1] = nullBatter;
-		bases[0] = nullBatter;
-	default:
-		break;
 	}
 	return value;
 }
 
 // adds 1 to the hits for the hitting team
-void hitCounter() {
+void Game::hitCounter() {
 	if (half == 0) {
-		awayTeam->score[19]++;
+		score[0][19]++;
 	}
 	else {
-		homeTeam->score[19]++;
+		score[0][19]++;
 	}
 }
 
 // scores a run for the hitting team
-void isScored() {
+void Game::isScored() {
 	if (half == 0) {
-		awayTeam->score[inning - 1]++;
-		awayTeam->score[18]++;
+		score[0][inning - 1]++;
+		score[0][18]++;
 	}
 	else {
-		homeTeam->score[inning - 1]++;
-		homeTeam->score[18]++;
+		score[1][inning - 1]++;
+		score[1][18]++;
 	}
 }
 
 // prints out the current outs
-void outsPrinter() {
+void Game::outsPrinter() {
 	std::cout << "Outs: " << outs << '\n';
 }
 
 // prints out the current inning including top or bottom
-void inningPrinter() {
+void Game::inningPrinter() {
 	if (half == 0) {
 		std::cout << "Inning: Top " << inning << '\n';
 	}
@@ -964,7 +826,7 @@ void inningPrinter() {
 }
 
 // prints out the boxscore
-void boxScore() {
+void Game::boxScore() {
 	if (inning <= 9) {
 		std::cout << "    | 1| 2| 3| 4| 5| 6| 7| 8| 9| R| H" << '\n';
 	}
@@ -972,14 +834,14 @@ void boxScore() {
 		std::cout << "    |10|11|12|13|14|15|16|17|18| R| H" << '\n';
 	}
 	std::cout << "____|__|__|__|__|__|__|__|__|__|__|__" << '\n';
-	std::cout << awayTeam->teamInitials << " ";
+	std::cout << awayTeam->getInitials() << " ";
 	for (int i = (((inning - 1) / 9) * 9); i < (((inning + 8) / 9) * 9); i++) {
 		if (i + 1 <= inning) {
-			if (awayTeam->score[i] < 10) {
-				std::cout << "| " << awayTeam->score[i];
+			if (score[0][i] < 10) {
+				std::cout << "| " << score[0][i];
 			}
 			else {
-				std::cout << "|" << awayTeam->score[i];
+				std::cout << "|" << score[0][i];
 			}
 		}
 		else {
@@ -987,23 +849,23 @@ void boxScore() {
 		}
 	}
 	for (int i = 18; i < 20; i++) {
-		if (awayTeam->score[i] < 10) {
-			std::cout << "| " << awayTeam->score[i];
+		if (score[0][i] < 10) {
+			std::cout << "| " << score[0][i];
 		}
 		else {
-			std::cout << "|" << awayTeam->score[i];
+			std::cout << "|" << score[0][i];
 		}
 	}
 	std::cout << '\n';
 	std::cout << "____|__|__|__|__|__|__|__|__|__|__|__" << '\n';
-	std::cout << homeTeam->teamInitials << " ";
+	std::cout << homeTeam->getInitials() << " ";
 	for (int i = (((inning - 1) / 9) * 9); i < (((inning + 8) / 9) * 9); i++) {
 		if (i + 1 < inning || (i + 1 == inning && half == 1)) {
-			if (homeTeam->score[i] < 10) {
-				std::cout << "| " << homeTeam->score[i];
+			if (score[1][i] < 10) {
+				std::cout << "| " << score[1][i];
 			}
 			else {
-				std::cout << "|" << homeTeam->score[i];
+				std::cout << "|" << score[1][i];
 			}
 		}
 		else {
@@ -1011,63 +873,64 @@ void boxScore() {
 		}
 	}
 	for (int i = 18; i < 20; i++) {
-		if (homeTeam->score[i] < 10) {
-			std::cout << "| " << homeTeam->score[i];
+		if (score[1][i] < 10) {
+			std::cout << "| " << score[1][i];
 		}
 		else {
-			std::cout << "|" << homeTeam->score[i];
+			std::cout << "|" << score[1][i];
 		}
 	}
 	std::cout << "\n\n";
 }
 
 // prints the runners on base
-void basesPrinter() {
-	std::cout << "At bat: " << bases[0].fullName() << '\n';
-	std::cout << "On first: " << bases[1].fullName() << '\n';
-	std::cout << "On second: " << bases[2].fullName() << '\n';
-	std::cout << "On third: " << bases[3].fullName() << '\n';
+void Game::basesPrinter() {
+	std::cout << "At bat: " << bases[0]->fullName() << '\n';
+	std::cout << "On first: " << bases[1]->fullName() << '\n';
+	std::cout << "On second: " << bases[2]->fullName() << '\n';
+	std::cout << "On third: " << bases[3]->fullName() << '\n';
 	std::cout << '\n';
 }
 
 // prints out how many wins each team has so far
-void winsPrinter() {
-	std::cout << awayTeam->teamInitials << ": " << awayTeam->wins << '\n';
-	std::cout << homeTeam->teamInitials << ": " << homeTeam->wins << "\n\n";
+void Game::winsPrinter() {
+	awayTeam->winsPrinter();
+	homeTeam->winsPrinter();
+	std::cout << std::endl;
 }
 
-void inningOverPrinter() {
+void Game::inningOverPrinter() {
 	std::cout << "The inning is over.\n";
 }
 
 // returns true if the inning is over
-bool isInningOver() {
+bool Game::isInningOver() {
 	if (outs == 3) {
 		outs = 0;
 		if (half == 0) {
-			for (int i = 0; i < teamSize; i++) {
-				field[i] = awayTeam->fieldingLineup[i];
+			for (int i = 0; i < teamSize - 1; i++) {
+				field[i] = awayTeam->getFielderInLineup(i);
 			}
 			half = 1;
 		}
 		else {
-			for (int i = 0; i < teamSize; i++) {
-				field[i] = homeTeam->fieldingLineup[i];
+			for (int i = 0; i < teamSize - 1; i++) {
+				field[i] = homeTeam->getFielderInLineup(i);
 			}
 			half = 0;
 			inning++;
 		}
 		if (inning > 9) {
-			bases[3] = nullBatter;
-			bases[2] = awayTeam->currentBatter;
-			bases[1] = nullBatter;
-			bases[0] = nullBatter;
+			bases[3] = NULL;
+			bases[2] = awayTeam->getCurrentBatter();
+			bases[1] = NULL;
+			bases[0] = NULL;
 		}
 		else {
-			bases[3] = nullBatter;
-			bases[2] = nullBatter;
-			bases[1] = nullBatter;
-			bases[0] = nullBatter;
+			bases[3] = NULL;
+			bases[2] = NULL;
+			bases[1] = NULL;
+			bases[0] = NULL;
 		}
 		return true;
 	}
@@ -1077,20 +940,23 @@ bool isInningOver() {
 }
 
 // returns true if the game is over
-bool isGameOver() {
-	if (inning == 9 && half == 0 && outs == 3 && homeTeam->score[18] > awayTeam->score[18]) {
-		std::cout << homeTeam->teamName << " wins!" << "\n\n";
-		homeTeam->wins++;
+bool Game::isGameOver() {
+	if (inning == 9 && half == 0 && outs == 3 && score[1][18] > score[0][18]) {
+		std::cout << homeTeam->getName() << " wins!" << "\n\n";
+		int wins = homeTeam->getWins();
+		homeTeam->setWins(++wins);
 		return true;
 	}
-	else if (inning >= 9 && half == 1 && homeTeam->score[18] > awayTeam->score[18]) {
-		std::cout << homeTeam->teamName << " wins!" << "\n\n";
-		homeTeam->wins++;
+	else if (inning >= 9 && half == 1 && score[1][18] > score[0][18]) {
+		std::cout << homeTeam->getName() << " wins!" << "\n\n";
+		int wins = homeTeam->getWins();
+		homeTeam->setWins(++wins);
 		return true;
 	}
-	else if (inning >= 9 && half == 1 && outs == 3 && homeTeam->score[18] < awayTeam->score[18]) {
-		std::cout << awayTeam->teamName << " wins!" << "\n\n";
-		awayTeam->wins++;
+	else if (inning >= 9 && half == 1 && outs == 3 && score[1][18] < score[0][18]) {
+		std::cout << awayTeam->getName() << " wins!" << "\n\n";
+		int wins = awayTeam->getWins();
+		awayTeam->setWins(++wins);
 		return true;
 	}
 	else if (inning == 19) {
@@ -1103,23 +969,23 @@ bool isGameOver() {
 }
 
 // resets the game to the initial gamestate
-void resetGame() {
-	awayTeam->currentBatter = awayTeam->battingLineup[0];
-	homeTeam->currentBatter = homeTeam->battingLineup[0];
+void Game::resetGame() {
+	awayTeam->setCurrentBatter(awayTeam->getBatterInLineup(0));
+	homeTeam->setCurrentBatter(homeTeam->getBatterInLineup(0));
 	for (int i = 0; i < 20; i++) {
-		awayTeam->score[i] = {};
-		homeTeam->score[i] = {};
+		score[0][i] = {};
+		score[1][i] = {};
 	}
-	for (int i = 0; i < 8; i++) {
-		field[i] = homeTeam->fieldingLineup[i];
+	for (int i = 0; i < teamSize - 1; i++) {
+		field[i] = homeTeam->getFielderInLineup(i);
 	}
 	for (int i = 0; i < 4; i++) {
-		bases[i] = nullBatter;
+		bases[i] = NULL;
 	}
 	//resetSpeed();
-	inning = { 1 };
-	outs = { 0 };
-	half = { 0 };
+	inning = 1;
+	outs = 0;
+	half = 0;
 }
 
 /*

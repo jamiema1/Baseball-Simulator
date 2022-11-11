@@ -149,8 +149,9 @@
     <ClCompile Include="src\main\main.cpp" />
     <ClCompile Include="src\main\pitcher.cpp" />
     <ClCompile Include="src\main\player.cpp" />
-    <ClCompile Include="src\main\state.cpp" />
+    <ClCompile Include="src\main\game.cpp" />
     <ClCompile Include="src\main\timeDelay.cpp" />
+    <ClCompile Include="src\main\team.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main\batter.h" />
@@ -158,8 +159,9 @@
     <ClInclude Include="src\main\intro.h" />
     <ClInclude Include="src\main\pitcher.h" />
     <ClInclude Include="src\main\player.h" />
-    <ClInclude Include="src\main\state.h" />
+    <ClInclude Include="src\main\game.h" />
     <ClInclude Include="src\main\timeDelay.h" />
+    <ClInclude Include="src\main\team.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

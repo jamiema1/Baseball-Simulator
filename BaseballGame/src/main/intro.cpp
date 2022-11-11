@@ -1,5 +1,5 @@
 #include "intro.h"
-#include "state.h"
+#include "game.h"
 
 #include <conio.h>
 #include <iostream>
@@ -15,7 +15,7 @@ void run() {
 	std::cout << mode;
 	//modeSelector(mode);
 
-	game();
+	Game g = new Game();
 }
 
 void startMenu() {
