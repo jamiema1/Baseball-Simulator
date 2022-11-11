@@ -1,23 +1,25 @@
 #ifndef STATE_H
 #define STATE_H
 #include <string>
+#include "batter.h"
+#include "pitcher.h"
 
 struct Team {
 	std::string teamName{};
 	std::string teamInitials{};
-	int batters[20]{};
-	int battingLineup[9]{};
-	int fieldingLineup[9]{};
-	int currentBatter{};
-	int pitchers[20]{};
-	int currentPitcher{};
+	Batter batters[20];
+	Batter battingLineup[9];
+	Batter fieldingLineup[8];
+	Batter currentBatter;
+	Pitcher pitchers[20];
+	Pitcher currentPitcher;
 	int score[20]{};
 	int wins{};
 };
 
 struct Division {
 	std::string divisionName{};
-	Team teams[5]{};
+	Team teams[5];
 };
 
 struct League {
@@ -39,7 +41,7 @@ bool displayText();
 
 void switchTeams();
 void game();
-void fiveGameSeries(int team1, int team2);
+//void fiveGameSeries(int team1, int team2);
 
 void start();
 void boxScore();
@@ -48,23 +50,23 @@ void lineups();
 void batterLineup();
 void pitcherLineup();
 
-int currentBatter();
-int currentPitcher();
+Batter currentBatter();
+Pitcher currentPitcher();
 void nextBatter();
 void nextPitcher();
-void nextBatter2(Team team);
+//void nextBatter2(Team team);
 
-void pitchPrinter(int batter, int pitcher, int stat);
+void pitchPrinter(Batter batter, Pitcher pitcher, int stat);
 void pitchResultPrinter(int pitchValue);
-int pitchResult(int batter, int pitcher, int stat);
+int pitchResult(Batter batter, Pitcher pitcher, int stat);
 int isContact(int value);
-int hitPositionSelector(int position);
+Batter hitPositionSelector(int position);
 void hitPositionPrinter(int position);
 
 
 void hitResultPrinter(int hit);
-int hitResult(int hitPosition, int batter, int stat);
-int isHit(int batter, int value);
+int hitResult(int hitPosition, Batter batter, int stat);
+int isHit(Batter batter, int value);
 void hitCounter();
 
 void isScored();

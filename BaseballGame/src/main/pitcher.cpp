@@ -389,6 +389,96 @@ Pitcher pitchers[384]{
 {"Austin","Voth","P","R","R",49,4,1,57.1,57,35,34,28,59,0,1.483,5.34,-0.4}
 };
 
+enum class Pitcher::PitcherStat {
+	G,
+	W,
+	L,
+	IP,
+	H,
+	R,
+	ER,
+	BB,
+	SO,
+	SV,
+	WHIP,
+	ERA,
+	WAR
+};
+
+Pitcher::Pitcher() {};
+
+Pitcher::Pitcher(std::string firstName, std::string lastName, std::string position, std::string bats, std::string throws,
+	int games, int wins, int loses, double inningspitched, int hits, int runs, int earnedruns, int walks,
+	int strikeouts, int saves, double whip, double era, double war) {
+
+	//Player(firstName, lastName, position, bats, throws);
+	this->firstName = firstName;
+	this->lastName = lastName;
+	this->position = position;
+	this->bats = bats;
+	this->throws = throws;
+	stats[0] = games;
+	stats[1] = wins;
+	stats[2] = loses;
+	stats[3] = inningspitched;
+	stats[4] = hits;
+	stats[5] = runs;
+	stats[6] = earnedruns;
+	stats[7] = walks;
+	stats[8] = strikeouts;
+	stats[9] = saves;
+	stats[10] = whip;
+	stats[11] = era;
+	stats[12] = war;
+}
+
+double Pitcher::statSelector(int stat) {
+
+	return stats[(int)stat];
+}
+
+// prints the stat for the specific batter
+void Pitcher::statSelectorPrinter(int stat) {
+	std::cout << fullName();
+	std::cout << " has ";
+	std::cout << statSelector(stat);
+	std::cout << " stat. ";
+}
+
+// returns the value of a stat for a given batter
+std::string Pitcher::stringStatSelector(int stat) {
+	switch (stat) {
+	case 0:
+		return firstName;
+		break;
+	case 1:
+		return lastName;
+		break;
+	case 2:
+		return position;
+		break;
+	case 3:
+		return bats;
+		break;
+	case 4:
+		return throws;
+		break;
+	default:
+		return "Invalid Selection";
+		break;
+	}
+}
+
+// returns a batters full name with a space inbetween
+std::string Pitcher::fullName() {
+	std::string str{};
+	std::string str1{ str.append(stringStatSelector(0)) };
+	std::string str2{ str1.append(" ") };
+	std::string str3{ str2.append(stringStatSelector(1)) };
+	return str3;
+}
+
+/*
 std::string pitcherFullName(int pitcher) {
 	std::string str{};
 	std::string str1{ str.append(pitcherStringStatSelector(0,pitcher)) };
@@ -517,3 +607,4 @@ double pitcherStatSelector(int stat, int pitcher) {
 		break;
 	}
 }
+*/

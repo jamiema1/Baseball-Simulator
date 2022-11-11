@@ -3,7 +3,12 @@
 #include <string>
 
 
-Batter batters[473]{
+
+
+
+
+
+Batter batters[467] {
 {"","","","","",0,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0},
 
 // AL
@@ -476,6 +481,7 @@ Batter batters[473]{
 { "Lane","Thomas","CF","R","",77,226,35,53,15,2,7,28,6,37,0.412,0.752,0.235,1 },
 { "Ryan","Zimmerman","1B","R","",110,255,27,62,16,0,14,46,0,16,0.471,0.756,0.243,1.2 }
 };
+
 /*
 Batter batters[37]{
 	{"","","","","",0,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0},
@@ -517,8 +523,9 @@ Batter batters[37]{
 	{"J.D.","Martinez","DH","R","R",148,570,92,163,42,3,28,99,0,55,0.518,0.867,0.286,3}
 };
 */
+/*
 // allows the user to select a batter and returns the number for the chosen batter
-int batterSelectorInput() {
+int Batter::selectorInput() {
 	int x{};
 	while (true) {
 		std::cout << "Type in the number corresponding to player you wish to view: ";
@@ -542,7 +549,7 @@ int batterSelectorInput() {
 }
 
 // prints the batter selector screen and returns the number for the batter chosen
-void batterSelectorScreen() {
+void Batter::selectorScreen() {
 	for (int i = 1; i < 10; i++) {
 		std::cout << i << ". " << batters[i].firstName << " "
 			      << batters[i].lastName << '\n';
@@ -551,7 +558,7 @@ void batterSelectorScreen() {
 }
 
 
-std::string batterNameSelector(int name, int batter) {
+std::string Batter::nameSelector(int name, int batter) {
 	switch (name) {
 	case 0:
 		return batters[batter].firstName;
@@ -569,16 +576,156 @@ std::string batterNameSelector(int name, int batter) {
 }
 
 
-std::string batterFullName(int batter) {
-	std::string str{};
-	std::string str1{ str.append(batterStringStatSelector(0,batter)) };
-	std::string str2{ str1.append(" ") };
-	std::string str3{ str2.append(batterStringStatSelector(1,batter)) };
-	return str3;
+// allows the user to select which stat they want to select
+int Batter::statSelectorInput(int batter) {
+	int stat{};
+	while (true) {
+		std::cout << "Type the number corresponding to the category you wish to view: ";
+		std::cin >> stat;
+		if (stat > 15 || stat < 3) {
+			std::cout << "Try Again. ";
+		}
+		else {
+			return stat;
+			break;
+		}
+	}
+
+}
+
+// prints the batter selector screen and returns the value for the stat
+int Batter::statSelectorScreen(int batter) {
+	std::cout << 0 << ". " << "First Name" << '\n';
+	std::cout << 1 << ". " << "Last Name" << '\n';
+	std::cout << 2 << ". " << "Position" << '\n';
+	std::cout << 3 << ". " << "Games" << '\n';
+	std::cout << 4 << ". " << "At Bats" << '\n';
+	std::cout << 5 << ". " << "Runs" << '\n';
+	std::cout << 6 << ". " << "Hits" << '\n';
+	std::cout << 7 << ". " << "Doubles" << '\n';
+	std::cout << 8 << ". " << "Triples" << '\n';
+	std::cout << 9 << ". " << "Homeruns" << '\n';
+	std::cout << 10 << ". " << "RBIs" << '\n';
+	std::cout << 11 << ". " << "Stolen Bases" << '\n';
+	std::cout << 12 << ". " << "Walks" << '\n';
+	std::cout << 13 << ". " << "SLG" << '\n';
+	std::cout << 14 << ". " << "OPS" << '\n';
+	std::cout << 15 << ". " << "AVG" << '\n';
+	int y{ Batter::statSelectorInput(batter) };
+	std::cout << y << std::endl;
+	return y;
+}
+*/
+
+enum class Batter::BatterStat {
+	G,
+	AB,
+	R,
+	H,
+	DBL,
+	TRP,
+	HR,
+	RBI,
+	SB,
+	BB,
+	SLG,
+	OPS,
+	AVG,
+	WAR
+};
+
+Batter::Batter() {
+
+}
+
+Batter::Batter(std::string firstName, std::string lastName, std::string position, std::string bats, std::string throws,
+	int games, int atbats, int runs, int hits, int doubles, int triples, int homeruns, int rbis, int stolenbases, 
+	int walks, double slugging, double ops, double average, double war) {
+
+	//Player(firstName, lastName, position, bats, throws);
+	this->firstName = firstName;
+	this->lastName = lastName;
+	this->position = position;
+	this->bats = bats;
+	this->throws = throws;
+	stats[0] = games;
+	stats[1] = atbats;
+	stats[2] = runs;
+	stats[3] = hits;
+	stats[4] = doubles;
+	stats[5] = triples;
+	stats[6] = homeruns;
+	stats[7] = rbis;
+	stats[8] = stolenbases;
+	stats[9] = walks;
+	stats[10] = slugging;
+	stats[11] = ops;
+	stats[12] = average;
+	stats[13] = war;
+}
+
+double Batter::statSelector(int stat) {
+
+	return stats[(int) stat];
+
+	/*
+		switch (stat) {
+	case 0:
+		return static_cast<double>(batters[batter].games);
+		break;
+	case 1:
+		return static_cast<double>(batters[batter].atbats);
+		break;
+	case 2:
+		return static_cast<double>(batters[batter].runs);
+		break;
+	case 3:
+		return static_cast<double>(batters[batter].hits);
+		break;
+	case 4:
+		return static_cast<double>(batters[batter].doubles);
+		break;
+	case 5:
+		return static_cast<double>(batters[batter].triples);
+		break;
+	case 6:
+		return static_cast<double>(batters[batter].homeruns);
+		break;
+	case 7:
+		return static_cast<double>(batters[batter].rbis);
+		break;
+	case 8:
+		return static_cast<double>(batters[batter].stolenbases);
+		break;
+	case 9:
+		return static_cast<double>(batters[batter].walks);
+		break;
+	case 10:
+		return batters[batter].slugging;
+		break;
+	case 11:
+		return batters[batter].ops;
+		break;
+	case 12:
+		return batters[batter].average;
+		break;
+	case 13:
+		return batters[batter].war;
+		break;
+	default:
+		return 0.0;
+		break;
+	}
+	*/
 }
 
 // prints the stat for the specific batter
-void batterStatSelectorPrinter(int stat, int batter) {
+void Batter::statSelectorPrinter(int stat) {
+	std::cout << fullName();
+	std::cout << " has ";
+	std::cout << statSelector(stat);
+	std::cout << " stat. ";
+		/*
 	std::cout << batters[batter].firstName << " " << batters[batter].lastName
 		<< " has ";
 	switch (stat) {
@@ -628,25 +775,44 @@ void batterStatSelectorPrinter(int stat, int batter) {
 		std::cout << "Invalid Selection\n";
 		break;
 	}
+	*/
+}
+
+bool Batter::operator==(Batter obj) {
+	for (int i = 0; i < 5; i++) {
+		if (this->stringStatSelector(i) != obj.stringStatSelector(i)) {
+			return false;
+		}
+	}
+	for (int i = 0; i < 14; i++) {
+		if (this->stats[i] != obj.stats[i]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool Batter::operator!=(Batter obj) {
+	return !(operator==(obj));
 }
 
 // returns the value of a stat for a given batter
-std::string batterStringStatSelector(int stat, int batter) {
+std::string Batter::stringStatSelector(int stat) {
 	switch (stat) {
 	case 0:
-		return batters[batter].firstName;
+		return firstName;
 		break;
 	case 1:
-		return batters[batter].lastName;
+		return lastName;
 		break;
 	case 2:
-		return batters[batter].position;
+		return position;
 		break;
 	case 3:
-		return batters[batter].bats;
+		return bats;
 		break;
 	case 4:
-		return batters[batter].throws;
+		return throws;
 		break;
 	default:
 		return "Invalid Selection";
@@ -654,93 +820,11 @@ std::string batterStringStatSelector(int stat, int batter) {
 	}
 }
 
-// returns the value of a stat for a given batter
-double batterStatSelector(int stat, int batter) {
-	switch (stat) {
-	case 0:
-		return static_cast<double>(batters[batter].games);
-		break;
-	case 1:
-		return static_cast<double>(batters[batter].atbats);
-		break;
-	case 2:
-		return static_cast<double>(batters[batter].runs);
-		break;
-	case 3:
-		return static_cast<double>(batters[batter].hits);
-		break;
-	case 4:
-		return static_cast<double>(batters[batter].doubles);
-		break;
-	case 5:
-		return static_cast<double>(batters[batter].triples);
-		break;
-	case 6:
-		return static_cast<double>(batters[batter].homeruns);
-		break;
-	case 7:
-		return static_cast<double>(batters[batter].rbis);
-		break;
-	case 8:
-		return static_cast<double>(batters[batter].stolenbases);
-		break;
-	case 9:
-		return static_cast<double>(batters[batter].walks);
-		break;
-	case 10:
-		return batters[batter].slugging;
-		break;
-	case 11:
-		return batters[batter].ops;
-		break;
-	case 12:
-		return batters[batter].average;
-		break;
-	case 13:
-		return batters[batter].war;
-		break;
-	default:
-		return 0.0;
-		break;
-	}
-}
-
-// allows the user to select which stat they want to select
-int batterStatSelectorInput(int batter) {
-	int stat{};
-	while (true) {
-		std::cout << "Type the number corresponding to the category you wish to view: ";
-		std::cin >> stat;
-		if (stat > 15 || stat < 3) {
-			std::cout << "Try Again. ";
-		}
-		else {
-			return stat;
-			break;
-		}
-	}
-	
-}
-
-// prints the batter selector screen and returns the value for the stat
-int batterStatSelectorScreen(int batter) {
-	std::cout << 0 << ". " << "First Name" << '\n';
-	std::cout << 1 << ". " << "Last Name" << '\n';
-	std::cout << 2 << ". " << "Position" << '\n';
-	std::cout << 3 << ". " << "Games" << '\n';
-	std::cout << 4 << ". " << "At Bats" << '\n';
-	std::cout << 5 << ". " << "Runs" << '\n';
-	std::cout << 6 << ". " << "Hits" << '\n';
-	std::cout << 7 << ". " << "Doubles" << '\n';
-	std::cout << 8 << ". " << "Triples" << '\n';
-	std::cout << 9 << ". " << "Homeruns" << '\n';
-	std::cout << 10 << ". " << "RBIs" << '\n';
-	std::cout << 11 << ". " << "Stolen Bases" << '\n';
-	std::cout << 12 << ". " << "Walks" << '\n';
-	std::cout << 13 << ". " << "SLG" << '\n';
-	std::cout << 14 << ". " << "OPS" << '\n';
-	std::cout << 15 << ". " << "AVG" << '\n';
-	int y{ batterStatSelectorInput(batter) };
-	std::cout << y << std::endl;
-	return y;
+// returns a batters full name with a space inbetween
+std::string Batter::fullName() {
+	std::string str{};
+	std::string str1{ str.append(stringStatSelector(0)) };
+	std::string str2{ str1.append(" ") };
+	std::string str3{ str2.append(stringStatSelector(1)) };
+	return str3;
 }

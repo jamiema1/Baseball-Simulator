@@ -15,51 +15,51 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\dice.cpp">
+    <ClCompile Include="src\main\dice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\intro.cpp">
+    <ClCompile Include="src\main\intro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\main\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\pitcher.cpp">
+    <ClCompile Include="src\main\pitcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\state.cpp">
+    <ClCompile Include="src\main\state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\timeDelay.cpp">
+    <ClCompile Include="src\main\timeDelay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\batter.cpp">
+    <ClCompile Include="src\main\batter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\player.cpp">
+    <ClCompile Include="src\main\player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\dice.h">
+    <ClInclude Include="src\main\dice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\intro.h">
+    <ClInclude Include="src\main\intro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\state.h">
+    <ClInclude Include="src\main\state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\timeDelay.h">
+    <ClInclude Include="src\main\timeDelay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\batter.h">
+    <ClInclude Include="src\main\batter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\pitcher.h">
+    <ClInclude Include="src\main\pitcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\player.h">
+    <ClInclude Include="src\main\player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
