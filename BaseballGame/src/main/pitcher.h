@@ -49,8 +49,6 @@ private:
 public:
 	enum class PitcherStat;
 
-	Pitcher();
-
 	// constructor
 	Pitcher(std::string firstName, std::string lastName, std::string position, std::string bats, std::string throws,
 		int games, int wins, int loses, double inningspitched, int hits, int runs, int earnedruns, int walks,

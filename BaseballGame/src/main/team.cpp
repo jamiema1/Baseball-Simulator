@@ -1,6 +1,27 @@
 #include "team.h"
 #pragma once
 
+Team::Team(std::string name, std::string initials, Batter* batters[20], Batter* battingLineup[9], Batter* fieldingLineup[8],
+	Batter* currentBatter, Pitcher* pitchers[20], Pitcher* currentPitcher) {
+
+	this->name = name;
+	this->initials = initials;
+	for (int i = 0; i < 20; i++) {
+		this->batters[i] = batters[i];
+		this->pitchers[i] = pitchers[i];
+		if (i < 9) {
+			this->battingLineup[i] = battingLineup[i];
+		}
+		if (i < 8) {
+			this->fieldingLineup[i] = fieldingLineup[i];
+		}
+	}
+	this->currentBatter = currentBatter;
+	this->currentPitcher = currentPitcher;
+}
+
+
+
 std::string Team::getName() {
 	return name;
 }

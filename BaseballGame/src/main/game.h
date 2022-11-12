@@ -1,11 +1,11 @@
-#ifndef STATE_H
-#define STATE_H
+#pragma once
+#include <array>
 #include <string>
 #include "batter.h"
 #include "pitcher.h"
 #include "team.h"
 #include "timeDelay.h"
-
+#include "dice.h"
 /*
 struct Team {
 	std::string teamName{};
@@ -43,7 +43,6 @@ private:
 	Team* homeTeam;
 
 	int outs;
-	int score;
 	int inning;
 	int half;
 
@@ -58,8 +57,12 @@ private:
 	Batter* field[9];
 	Batter* batter[9];
 
-	int score[2][20];
+	std::array<std::array<int, 20>, 2> score;
+	//int score[2][20] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 public:
+
+	// default constructor
+	Game();
 
 
 	// returns the current batter and sets them to being at bat
@@ -159,6 +162,3 @@ std::string fielder1(int length1, int length2, int position);
 void fieldPrinter();
 */
 
-
-
-#endif

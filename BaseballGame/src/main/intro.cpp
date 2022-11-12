@@ -15,7 +15,7 @@ void run() {
 	std::cout << mode;
 	//modeSelector(mode);
 
-	Game g = new Game();
+	new Game();
 }
 
 void startMenu() {

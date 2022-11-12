@@ -634,10 +634,6 @@ enum class Batter::BatterStat {
 	WAR
 };
 
-Batter::Batter() {
-
-}
-
 Batter::Batter(std::string firstName, std::string lastName, std::string position, std::string bats, std::string throws,
 	int games, int atbats, int runs, int hits, int doubles, int triples, int homeruns, int rbis, int stolenbases, 
 	int walks, double slugging, double ops, double average, double war) {

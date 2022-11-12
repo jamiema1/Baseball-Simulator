@@ -13,9 +13,12 @@ private:
 	Batter* currentBatter;
 	Pitcher* pitchers[20];
 	Pitcher* currentPitcher;
-	int wins;
-	int loses;
+	int wins = 0;
+	int loses = 0;
 public:
+
+	Team(std::string name, std::string initials, Batter* batters[20], Batter* battingLineup[9], Batter* fieldingLineup[8],
+		Batter* currentBatter, Pitcher* pitchers[20], Pitcher* currentPitcher);
 
 	// Getters
 	std::string getName();
