@@ -6,20 +6,7 @@
 #include "team.h"
 #include "timeDelay.h"
 #include "dice.h"
-/*
-struct Team {
-	std::string teamName{};
-	std::string teamInitials{};
-	Batter batters[20];
-	Batter battingLineup[9];
-	Batter fieldingLineup[8];
-	Batter currentBatter;
-	Pitcher pitchers[20];
-	Pitcher currentPitcher;
-	int score[20]{};
-	int wins{};
-};
-*/
+
 /*
 struct Division {
 	std::string divisionName{};
@@ -53,17 +40,18 @@ private:
 	 */
 	Batter* bases[4];
 
-	int teamSize = 9;
-	Batter* field[9];
-	Batter* batter[9];
+	static const int teamSize = 9;
+	Batter* field[teamSize - 1];
+	Batter* batter[teamSize];
 
 	std::array<std::array<int, 20>, 2> score;
-	//int score[2][20] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+
 public:
 
 	// default constructor
 	Game();
 
+private:
 
 	// returns the current batter and sets them to being at bat
 	Batter* getCurrentBatter();
@@ -71,16 +59,27 @@ public:
 	// returns the current pitcher
 	Pitcher* getCurrentPitcher();
 
-	// updates the current batter / pitcher
-	void nextBatter();
-	void nextPitcher();
 
 
 
+	/* returns the result of the pitch
+	 * 1  -> contact
+	 * 0  -> out
+	 * -1 -> nothing
+	 */
 	int pitchResult(int stat);
+
+	// prints out the stats of the pitch
 	void pitchPrinter(int stat);
+
+	// prints out the result of the pitch
 	void pitchResultPrinter(int pitchValue);
+
+	// updates the outs and sets bases[0] to NULL
 	void isOut();
+
+
+
 
 
 
@@ -88,6 +87,7 @@ public:
 	Batter* hitPositionSelector(int position);
 
 	// prints out the name of the player the ball is hit to
+	// 2 = C, ... , 9 = RF, 10 = double, etc
 	void hitPositionPrinter(int position);
 
 
@@ -95,16 +95,14 @@ public:
 	int hitResult(int hitPosition, int stat);
 
 	// prints out the result of the contact
-	void hitResultPrinter(int hit);
+	void hitResultPrinter(int hitValue);
 
 	
 
 
 
-	/* updates the game state when a hit occurs
-	 * changes the runners, outs, inning, score
-	 */
-	int isHit(int value);
+	// updates the game state when a hit occurs and changes the runners, outs, inning, score
+	int isHit(int hitValue);
 
 	// adds 1 to the hits for the hitting team
 	void hitCounter();
@@ -112,35 +110,53 @@ public:
 	// scores a run for the hitting team
 	void isScored();
 
-	// prints out the box score
-	void boxScore();
 
 
+
+
+	// updates the current batter / pitcher
+	void nextBatter();
+	void nextPitcher();
+
+
+/*
+ *	Game state printers
+ */
+
+	// prints the runners on base
 	void basesPrinter();
+	
+	// prints out the current inning including top or bottom
 	void inningPrinter();
+
+	// prints out the current outs
 	void outsPrinter();
 
+	// prints out the box score
+	void boxScorePrinter();
+
+	// prints out how many wins each team has so far
 	void winsPrinter();
 
+	// prints out a message denoting the end of an inning
 	void inningOverPrinter();
+
+
+
+
+
+	// returns true if the inning is over
 	bool isInningOver();
+
+	// returns true if the game is over
+	bool isGameOver();
 
 	// swaps the away and home teams
 	void swapTeams();
+
+
+	// resets the game to the initial gamestate
 	void resetGame();
-	bool isGameOver();
-
-
-
-
-
-
-
-
-
-
-	void game();
-	//void fiveGameSeries(int team1, int team2);
 
 	void start();
 };

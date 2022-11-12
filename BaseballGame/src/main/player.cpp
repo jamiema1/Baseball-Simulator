@@ -1,6 +1,7 @@
 #include "player.h"
 
 
+/*
 enum class PlayerStat {
 	firstName,
 	lastName,
@@ -8,7 +9,7 @@ enum class PlayerStat {
 	bats,
 	throws
 };
-
+*/
 
 // constructor
 Player::Player(std::string firstName, std::string lastName, std::string position, std::string bats, std::string throws) {
@@ -51,4 +52,17 @@ std::string Player::fullName() {
 	std::string str2{ str1.append(" ") };
 	std::string str3{ str2.append(stringStatSelector(1)) };
 	return str3;
+}
+
+double Player::statSelector(int stat) {
+
+	return stats[stat];
+}
+
+void Player::statSelectorPrinter(int stat) {
+	std::cout << fullName();
+	std::cout << " has ";
+	std::cout << statSelector(stat);
+	std::cout << " ";
+	std::cout << statsString[stat] << std::endl;
 }

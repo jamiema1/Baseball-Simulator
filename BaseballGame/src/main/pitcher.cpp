@@ -389,6 +389,7 @@ Pitcher pitchers[384]{
 {"Austin","Voth","P","R","R",49,4,1,57.1,57,35,34,28,59,0,1.483,5.34,-0.4}
 };
 
+/*
 enum class Pitcher::PitcherStat {
 	G,
 	W,
@@ -403,18 +404,13 @@ enum class Pitcher::PitcherStat {
 	WHIP,
 	ERA,
 	WAR
-};
+};*/
 
 Pitcher::Pitcher(std::string firstName, std::string lastName, std::string position, std::string bats, std::string throws,
 	int games, int wins, int loses, double inningspitched, int hits, int runs, int earnedruns, int walks,
-	int strikeouts, int saves, double whip, double era, double war) {
+	int strikeouts, int saves, double whip, double era, double war) : Player(firstName, lastName, position, bats, throws) {
 
-	//Player(firstName, lastName, position, bats, throws);
-	this->firstName = firstName;
-	this->lastName = lastName;
-	this->position = position;
-	this->bats = bats;
-	this->throws = throws;
+	
 	stats[0] = games;
 	stats[1] = wins;
 	stats[2] = loses;
@@ -428,8 +424,24 @@ Pitcher::Pitcher(std::string firstName, std::string lastName, std::string positi
 	stats[10] = whip;
 	stats[11] = era;
 	stats[12] = war;
+
+	
+	statsString[0] = "G";
+	statsString[1] = "W";
+	statsString[2] = "L";
+	statsString[3] = "IP";
+	statsString[4] = "H";
+	statsString[5] = "R";
+	statsString[6] = "ER";
+	statsString[7] = "BB";
+	statsString[8] = "SO";
+	statsString[9] = "SV";
+	statsString[10] = "WHIP";
+	statsString[11] = "ERA";
+	statsString[12] = "WAR";
 }
 
+/*
 double Pitcher::statSelector(int stat) {
 
 	return stats[(int)stat];
@@ -441,168 +453,5 @@ void Pitcher::statSelectorPrinter(int stat) {
 	std::cout << " has ";
 	std::cout << statSelector(stat);
 	std::cout << " stat. ";
-}
-
-// returns the value of a stat for a given batter
-std::string Pitcher::stringStatSelector(int stat) {
-	switch (stat) {
-	case 0:
-		return firstName;
-		break;
-	case 1:
-		return lastName;
-		break;
-	case 2:
-		return position;
-		break;
-	case 3:
-		return bats;
-		break;
-	case 4:
-		return throws;
-		break;
-	default:
-		return "Invalid Selection";
-		break;
-	}
-}
-
-// returns a batters full name with a space inbetween
-std::string Pitcher::fullName() {
-	std::string str{};
-	std::string str1{ str.append(stringStatSelector(0)) };
-	std::string str2{ str1.append(" ") };
-	std::string str3{ str2.append(stringStatSelector(1)) };
-	return str3;
-}
-
-/*
-std::string pitcherFullName(int pitcher) {
-	std::string str{};
-	std::string str1{ str.append(pitcherStringStatSelector(0,pitcher)) };
-	std::string str2{ str1.append(" ") };
-	std::string str3{ str2.append(pitcherStringStatSelector(1,pitcher)) };
-	return str3;
-}
-
-void pitcherStatSelectorPrinter(int stat, int pitcher) {
-	std::cout << pitchers[pitcher].firstName << " " << pitchers[pitcher].lastName
-		<< " has ";
-	switch (stat) {
-	case 0:
-		std::cout << pitchers[pitcher].games << " G\n";
-		break;
-	case 1:
-		std::cout << pitchers[pitcher].wins << " W\n";
-		break;
-	case 2:
-		std::cout << pitchers[pitcher].loses << " L\n";
-		break;
-	case 3:
-		std::cout << pitchers[pitcher].inningspitched << " IP\n";
-		break;
-	case 4:
-		std::cout << pitchers[pitcher].hits << " H\n";
-		break;
-	case 5:
-		std::cout << pitchers[pitcher].runs << " R\n";
-		break;
-	case 6:
-		std::cout << pitchers[pitcher].earnedruns << " ER\n";
-		break;
-	case 7:
-		std::cout << pitchers[pitcher].walks << " BB\n";
-		break;
-	case 8:
-		std::cout << pitchers[pitcher].strikeouts << " SO\n";
-		break;
-	case 9:
-		std::cout << pitchers[pitcher].saves << " SV\n";
-		break;
-	case 10:
-		std::cout << pitchers[pitcher].whip << " WHIP\n";
-		break;
-	case 11:
-		std::cout << pitchers[pitcher].era << " ERA\n";
-		break;
-	case 12:
-		std::cout << pitchers[pitcher].war << " WAR\n";
-		break;
-	default:
-		std::cout << "Invalid Selection\n";
-		break;
-	}
-}
-
-// returns the value of a stat for a given pitcher
-std::string pitcherStringStatSelector(int stat, int pitcher) {
-	switch (stat) {
-	case 0:
-		return pitchers[pitcher].firstName;
-		break;
-	case 1:
-		return pitchers[pitcher].lastName;
-		break;
-	case 2:
-		return pitchers[pitcher].position;
-		break;
-	case 3:
-		return pitchers[pitcher].bats;
-		break;
-	case 4:
-		return pitchers[pitcher].throws;
-		break;
-	default:
-		return "Invalid Selection";
-		break;
-	}
-}
-
-// returns the value of a stat for a given pitcher
-double pitcherStatSelector(int stat, int pitcher) {
-	switch (stat) {
-	case 0:
-		return static_cast<double>(pitchers[pitcher].games);
-		break;
-	case 1:
-		return static_cast<double>(pitchers[pitcher].wins);
-		break;
-	case 2:
-		return static_cast<double>(pitchers[pitcher].loses);
-		break;
-	case 3:
-		return pitchers[pitcher].inningspitched;
-		break;
-	case 4:
-		return static_cast<double>(pitchers[pitcher].hits);
-		break;
-	case 5:
-		return static_cast<double>(pitchers[pitcher].runs);
-		break;
-	case 6:
-		return static_cast<double>(pitchers[pitcher].earnedruns);
-		break;
-	case 7:
-		return static_cast<double>(pitchers[pitcher].walks);
-		break;
-	case 8:
-		return static_cast<double>(pitchers[pitcher].strikeouts);
-		break;
-	case 9:
-		return static_cast<double>(pitchers[pitcher].saves);
-		break;
-	case 10:
-		return pitchers[pitcher].whip;
-		break;
-	case 11:
-		return pitchers[pitcher].era;
-		break;
-	case 12:
-		return pitchers[pitcher].war;
-		break;
-	default:
-		return 0.0;
-		break;
-	}
 }
 */

@@ -617,6 +617,7 @@ int Batter::statSelectorScreen(int batter) {
 }
 */
 
+/*
 enum class Batter::BatterStat {
 	G,
 	AB,
@@ -633,17 +634,13 @@ enum class Batter::BatterStat {
 	AVG,
 	WAR
 };
+*/
 
 Batter::Batter(std::string firstName, std::string lastName, std::string position, std::string bats, std::string throws,
 	int games, int atbats, int runs, int hits, int doubles, int triples, int homeruns, int rbis, int stolenbases, 
-	int walks, double slugging, double ops, double average, double war) {
+	int walks, double slugging, double ops, double average, double war) : Player(firstName, lastName, position, bats, throws) {
 
-	//Player(firstName, lastName, position, bats, throws);
-	this->firstName = firstName;
-	this->lastName = lastName;
-	this->position = position;
-	this->bats = bats;
-	this->throws = throws;
+
 	stats[0] = games;
 	stats[1] = atbats;
 	stats[2] = runs;
@@ -658,122 +655,42 @@ Batter::Batter(std::string firstName, std::string lastName, std::string position
 	stats[11] = ops;
 	stats[12] = average;
 	stats[13] = war;
+
+
+	
+	statsString[0] = "G";
+	statsString[1] = "AB";
+	statsString[2] = "R";
+	statsString[3] = "H";
+	statsString[4] = "2B";
+	statsString[5] = "3B";
+	statsString[6] = "HR";
+	statsString[7] = "RBI";
+	statsString[8] = "SB";
+	statsString[9] = "BB";
+	statsString[10] = "SLG";
+	statsString[11] = "OPS";
+	statsString[12] = "AVG";
+	statsString[13] = "WAR";
+
+	
 }
 
+/*
 double Batter::statSelector(int stat) {
 
 	return stats[(int) stat];
-
-	/*
-		switch (stat) {
-	case 0:
-		return static_cast<double>(batters[batter].games);
-		break;
-	case 1:
-		return static_cast<double>(batters[batter].atbats);
-		break;
-	case 2:
-		return static_cast<double>(batters[batter].runs);
-		break;
-	case 3:
-		return static_cast<double>(batters[batter].hits);
-		break;
-	case 4:
-		return static_cast<double>(batters[batter].doubles);
-		break;
-	case 5:
-		return static_cast<double>(batters[batter].triples);
-		break;
-	case 6:
-		return static_cast<double>(batters[batter].homeruns);
-		break;
-	case 7:
-		return static_cast<double>(batters[batter].rbis);
-		break;
-	case 8:
-		return static_cast<double>(batters[batter].stolenbases);
-		break;
-	case 9:
-		return static_cast<double>(batters[batter].walks);
-		break;
-	case 10:
-		return batters[batter].slugging;
-		break;
-	case 11:
-		return batters[batter].ops;
-		break;
-	case 12:
-		return batters[batter].average;
-		break;
-	case 13:
-		return batters[batter].war;
-		break;
-	default:
-		return 0.0;
-		break;
-	}
-	*/
 }
 
-// prints the stat for the specific batter
 void Batter::statSelectorPrinter(int stat) {
 	std::cout << fullName();
 	std::cout << " has ";
 	std::cout << statSelector(stat);
 	std::cout << " stat. ";
-		/*
-	std::cout << batters[batter].firstName << " " << batters[batter].lastName
-		<< " has ";
-	switch (stat) {
-	case 0:
-		std::cout << batters[batter].games << " G\n";
-		break;
-	case 1:
-		std::cout << batters[batter].atbats << " AB\n";
-		break;
-	case 2:
-		std::cout << batters[batter].runs << " R\n";
-		break;
-	case 3:
-		std::cout << batters[batter].hits << " H\n";
-		break;
-	case 4:
-		std::cout << batters[batter].doubles << " 2B\n";
-		break;
-	case 5:
-		std::cout << batters[batter].triples << " 3B\n";
-		break;
-	case 6:
-		std::cout << batters[batter].homeruns << " HR\n";
-		break;
-	case 7:
-		std::cout << batters[batter].rbis << " RBI\n";
-		break;
-	case 8:
-		std::cout << batters[batter].stolenbases << " SB\n";
-		break;
-	case 9:
-		std::cout << batters[batter].walks << " BB\n";
-		break;
-	case 10:
-		std::cout << batters[batter].slugging << " SLG\n";
-		break;
-	case 11:
-		std::cout << batters[batter].ops << " OPS\n";
-		break;
-	case 12:
-		std::cout << batters[batter].average << " AVG\n";
-		break;
-	case 13:
-		std::cout << batters[batter].war << " WAR\n";
-		break;
-	default:
-		std::cout << "Invalid Selection\n";
-		break;
-	}
-	*/
 }
+*/
 
+/*
 bool Batter::operator==(Batter obj) {
 	for (int i = 0; i < 5; i++) {
 		if (this->stringStatSelector(i) != obj.stringStatSelector(i)) {
@@ -790,37 +707,4 @@ bool Batter::operator==(Batter obj) {
 
 bool Batter::operator!=(Batter obj) {
 	return !(operator==(obj));
-}
-
-// returns the value of a stat for a given batter
-std::string Batter::stringStatSelector(int stat) {
-	switch (stat) {
-	case 0:
-		return firstName;
-		break;
-	case 1:
-		return lastName;
-		break;
-	case 2:
-		return position;
-		break;
-	case 3:
-		return bats;
-		break;
-	case 4:
-		return throws;
-		break;
-	default:
-		return "Invalid Selection";
-		break;
-	}
-}
-
-// returns a batters full name with a space inbetween
-std::string Batter::fullName() {
-	std::string str{};
-	std::string str1{ str.append(stringStatSelector(0)) };
-	std::string str2{ str1.append(" ") };
-	std::string str3{ str2.append(stringStatSelector(1)) };
-	return str3;
-}
+}*/

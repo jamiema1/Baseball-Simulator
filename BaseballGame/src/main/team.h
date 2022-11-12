@@ -45,5 +45,7 @@ public:
 	// prints out how many wins a team has so far
 	void winsPrinter();
 	
+
+	Team* createTeam();
 };
 

@@ -8,12 +8,11 @@ protected:
 	std::string position{};
 	std::string bats{};
 	std::string throws{};
+	double stats[14];
+	std::string statsString[14];
 
 public:
-	enum class PlayerStat;
-
-	// default constructor
-	Player() {};
+	//enum class PlayerStat;
 
 	// constructor
 	Player(std::string firstName, std::string lastName, std::string position, std::string bats, std::string throws);
@@ -25,8 +24,8 @@ public:
 	std::string fullName();
 
 	// returns the value of a stat
-	virtual double statSelector(int stat) =0;
+	double statSelector(int stat);
 
 	// prints the value of the stat
-	virtual void statSelectorPrinter(int stat) =0;
+	void statSelectorPrinter(int stat);
 };
