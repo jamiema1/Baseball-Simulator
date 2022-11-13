@@ -7,10 +7,9 @@
 #include "timeDelay.h"
 #include "dice.h"
 
-/*
 struct Division {
 	std::string divisionName{};
-	Team teams[5];
+	Team* teams[5];
 };
 
 struct League {
@@ -22,7 +21,7 @@ struct Organization {
 	std::string organizationName{};
 	League leagues[2]{};
 };
-*/
+
 
 class Game {
 private:
@@ -41,10 +40,11 @@ private:
 	Batter* bases[4];
 
 	static const int teamSize = 9;
-	Batter* field[teamSize - 1];
+	Batter* field[teamSize];
 	Batter* batter[teamSize];
 
 	std::array<std::array<int, 20>, 2> score;
+	
 
 public:
 

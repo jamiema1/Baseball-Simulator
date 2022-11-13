@@ -17,6 +17,7 @@ public:
 		int walks, double slugging, double ops, double average, double war);
 
 
+
 	// returns the value of a stat for a given batter
 	//double statSelector(int stat) override;
 

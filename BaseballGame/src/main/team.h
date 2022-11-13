@@ -9,16 +9,32 @@ private:
 	std::string initials;
 	Batter* batters[20];
 	Batter* battingLineup[9];
-	Batter* fieldingLineup[8];
+	Batter* fieldingLineup[9];
 	Batter* currentBatter;
 	Pitcher* pitchers[20];
 	Pitcher* currentPitcher;
 	int wins = 0;
 	int loses = 0;
+
+	struct integerLOP {
+		int batters[20];
+		int battingLineup[9];
+		int fieldingLineup[9];
+		int currentBatter;
+		int pitchers[20];
+		int currentPitcher;
+	};
+
 public:
 
-	Team(std::string name, std::string initials, Batter* batters[20], Batter* battingLineup[9], Batter* fieldingLineup[8],
+	
+
+	Team(std::string name, std::string initials, Batter* batters[20], Batter* battingLineup[9], Batter* fieldingLineup[9],
 		Batter* currentBatter, Pitcher* pitchers[20], Pitcher* currentPitcher);
+
+	Team(std::string name, std::string initials, integerLOP lop);
+
+
 
 	// Getters
 	std::string getName();
